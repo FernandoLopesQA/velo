@@ -1,4 +1,4 @@
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from "@playwright/test";
 
 /**
  * Read environment variables from file.
@@ -12,8 +12,15 @@ import { defineConfig, devices } from '@playwright/test';
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  timeout: 5000, // 5 segundos para timeout padrão de locators e validações
-  testDir: './playwright/e2e',
+  //Tempo máximo para cada teste completo (30 segundos é o tempo default do Playwright)
+  timeout: 60_000,
+
+  // Tempo máximo para assertions (toBeVisible(), toHaveText()) -> 5 segundos
+  expect: {
+    timeout: 5_000, // Caso necessário, usar timeout explícito somente onde for necessário
+  },
+
+  testDir: "./playwright/e2e",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -23,21 +30,29 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: "html",
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
     // baseURL: 'http://localhost:3000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    trace: "on-first-retry",
+
+    // Tempo máximo para ações interativas como click(), fill()
+    // Quando o valor é 0, herda o limite do timeout geral do teste
+    actionTimeout: 5_000,
+
+    // Tempo máximo para navegações como goto(), waitForURL()
+    // Quando o valor é 0, herda o limite do timeout geral do teste
+    navigationTimeout: 10_0000
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
     },
 
     // {
