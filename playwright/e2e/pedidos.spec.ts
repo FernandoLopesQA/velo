@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { generateOrderCode } from '../support/helpers'
-import { number } from 'zod'
+import { OrderLockupPage } from '../support/pages/OrderLockupPage'
 
 /// AAA - Arrange, Act, Assert
 
@@ -28,11 +28,11 @@ test.describe('Consulta de pedido', () => {
       payment: 'À Vista',
     }
 
-    //Act
-    await page.getByTestId('search-order-id').fill(order.number)
-    await page.getByRole('button', { name: 'Buscar Pedido' }).click()
+    // Act
+    const orderLockupPage = new OrderLockupPage(page)
+    await orderLockupPage.searchOrder(order.number)
 
-    //Assert
+    // Assert
     await expect(page.getByTestId(`order-result-${order.number}`)).toMatchAriaSnapshot(`
     - img
     - paragraph: Pedido
@@ -86,11 +86,11 @@ test.describe('Consulta de pedido', () => {
       payment: 'À Vista',
     }
 
-    //Act
-    await page.getByTestId('search-order-id').fill(order.number)
-    await page.getByRole('button', { name: 'Buscar Pedido' }).click()
+    // Act
+    const orderLockupPage = new OrderLockupPage(page)
+    await orderLockupPage.searchOrder(order.number)
 
-    //Assert
+    // Assert
     await expect(page.getByTestId(`order-result-${order.number}`)).toMatchAriaSnapshot(`
     - img
     - paragraph: Pedido
@@ -144,11 +144,11 @@ test.describe('Consulta de pedido', () => {
       payment: 'À Vista',
     }
 
-    //Act
-    await page.getByTestId('search-order-id').fill(order.number)
-    await page.getByRole('button', { name: 'Buscar Pedido' }).click()
+    // Act
+    const orderLockupPage = new OrderLockupPage(page)
+    await orderLockupPage.searchOrder(order.number)
 
-    //Assert
+    // Assert
     await expect(page.getByTestId(`order-result-${order.number}`)).toMatchAriaSnapshot(`
     - img
     - paragraph: Pedido
@@ -193,8 +193,8 @@ test.describe('Consulta de pedido', () => {
     const order = generateOrderCode()
 
     // Act
-    await page.getByTestId('search-order-id').fill(order)
-    await page.getByRole('button', { name: 'Buscar Pedido' }).click()
+    const orderLockupPage = new OrderLockupPage(page)
+    await orderLockupPage.searchOrder(order)
 
     // Assert
     // Códigos abaixo mantidos como exemplo de estudo
