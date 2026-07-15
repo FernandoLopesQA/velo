@@ -1,4 +1,4 @@
-import { defineConfig, devices } from "@playwright/test";
+import { defineConfig, devices } from '@playwright/test'
 
 /**
  * Read environment variables from file.
@@ -20,7 +20,7 @@ export default defineConfig({
     timeout: 5_000, // Caso necessário, usar timeout explícito somente onde for necessário
   },
 
-  testDir: "./playwright/e2e",
+  testDir: './playwright/e2e',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -30,14 +30,15 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: "html",
+  reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
     // baseURL: 'http://localhost:3000',
+    baseURL: 'http://localhost:5173',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: "retain-on-failure",
+    trace: 'retain-on-failure',
 
     // Tempo máximo para ações interativas como click(), fill()
     // Quando o valor é 0, herda o limite do timeout geral do teste
@@ -45,14 +46,14 @@ export default defineConfig({
 
     // Tempo máximo para navegações como goto(), waitForURL()
     // Quando o valor é 0, herda o limite do timeout geral do teste
-    navigationTimeout: 10_0000
+    navigationTimeout: 10_0000,
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
-      name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
     },
 
     // {
@@ -92,4 +93,4 @@ export default defineConfig({
   //   url: 'http://localhost:3000',
   //   reuseExistingServer: !process.env.CI,
   // },
-});
+})
