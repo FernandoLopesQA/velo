@@ -27,7 +27,6 @@ export function createOrderLockupActions(page: Page) {
     },
 
     async validateOrderDetails(order: OrderDetails) {
-      /* eslint-disable no-useless-escape */
       const snapshot = `
       - img
       - paragraph: Pedido
@@ -57,7 +56,6 @@ export function createOrderLockupActions(page: Page) {
       - paragraph: ${order.payment}
       - paragraph: /R\\$ \\d+\\.\\d+,\\d+/
       `
-      /* eslint-enable no-useless-escape */
       await expect(page.getByTestId(`order-result-${order.number}`)).toMatchAriaSnapshot(snapshot)
     },
 
