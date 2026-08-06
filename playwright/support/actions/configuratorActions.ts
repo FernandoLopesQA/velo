@@ -1,7 +1,6 @@
 import { Page, expect } from '@playwright/test'
 
 export function createConfiguratorActions(page: Page) {
-
   return {
     async open() {
       await page.goto('/configure')
@@ -24,6 +23,14 @@ export function createConfiguratorActions(page: Page) {
     async expectCarImageSrc(src: string) {
       const carImage = page.locator('img[alt^="Velô Sprint"]')
       await expect(carImage).toHaveAttribute('src', src)
-    }
+    },
+
+    async toggleOptional(name: string | RegExp) {
+      await page.getByRole('checkbox', { name }).click()
+    },
+
+    async checkout() {
+      await page.getByRole('button', { name: 'Monte o Seu' }).click()
+    },
   }
 }
