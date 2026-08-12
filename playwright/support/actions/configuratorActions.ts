@@ -29,7 +29,7 @@ export function createConfiguratorActions(page: Page) {
       await page.getByRole('checkbox', { name }).click()
     },
 
-    async checkout() {
+    async finishConfigurator() {
       await page.getByRole('button', { name: 'Monte o Seu' }).click()
     },
   }
