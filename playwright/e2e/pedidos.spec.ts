@@ -2,7 +2,7 @@ import { test, expect } from '../support/fixtures'
 import { generateOrderCode } from '../support/helpers'
 import type { OrderDetails } from '../support/actions/orderLockupActions'
 import { insertOrder, deleteOrderByNumber } from '../support/database/orderRepository'
-import data from '../support/fixtures/orders.json' with { type: 'json' }
+import testdata from '../support/fixtures/orders.json' with { type: 'json' }
 
 test.describe('Consulta de pedido', () => {
 
@@ -11,7 +11,7 @@ test.describe('Consulta de pedido', () => {
   })
 
   test('deve consultar um pedido aprovado', async ({ app }) => {
-    const order: OrderDetails = data.aprovado as OrderDetails
+    const order: OrderDetails = testdata.aprovado as OrderDetails
 
     await deleteOrderByNumber(order.number)
 
@@ -23,7 +23,7 @@ test.describe('Consulta de pedido', () => {
   })
 
   test('deve consultar um pedido reprovado', async ({ app }) => {
-    const order: OrderDetails = data.reprovado as OrderDetails
+    const order: OrderDetails = testdata.reprovado as OrderDetails
 
     await deleteOrderByNumber(order.number)
 
@@ -35,7 +35,7 @@ test.describe('Consulta de pedido', () => {
   })
 
   test('deve consultar um pedido em análise', async ({ app }) => {
-    const order: OrderDetails = data.em_analise as OrderDetails
+    const order: OrderDetails = testdata.em_analise as OrderDetails
 
     await deleteOrderByNumber(order.number)
 
