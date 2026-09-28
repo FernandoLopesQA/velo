@@ -9,31 +9,26 @@ test.describe('Checkout', () => {
 
   test.describe('Validações de campos obrigatórios', () => {
 
-    test('deve validar obrigatoriedade de todos os campos em branco', async ({ app, page }) => {
+    let alerts: any
 
-      const nameAlert = page.locator('//label[text()="Nome"]/..//p')
-      const surnameAlert = page.locator('//label[text()="Sobrenome"]/..//p')
-      const emailAlert = page.locator('//label[text()="Email"]/..//p')
-      const phoneAlert = page.locator('//label[text()="Telefone"]/..//p')
-      const cpfAlert = page.locator('//label[text()="CPF"]/..//p')
-      const storeAlert = page.locator('//label[text()="Loja para Retirada"]/..//p')
-      const termsAlert = page.locator('//label[@for="terms"]/following-sibling::p')
+    test.beforeEach(async ({ app, page }) => {
+      alerts = app.checkout.elements.alerts
+    })
+
+    test('deve validar obrigatoriedade de todos os campos em branco', async ({ app }) => {
 
       await app.checkout.submit()
 
-      await expect(nameAlert).toHaveText('Nome deve ter pelo menos 2 caracteres')
-      await expect(surnameAlert).toHaveText('Sobrenome deve ter pelo menos 2 caracteres')
-      await expect(emailAlert).toHaveText('Email inválido')
-      await expect(phoneAlert).toHaveText('Telefone inválido')
-      await expect(cpfAlert).toHaveText('CPF inválido')
-      await expect(storeAlert).toHaveText('Selecione uma loja')
-      await expect(termsAlert).toHaveText('Aceite os termos')
+      await expect(alerts.name).toHaveText('Nome deve ter pelo menos 2 caracteres')
+      await expect(alerts.lastName).toHaveText('Sobrenome deve ter pelo menos 2 caracteres')
+      await expect(alerts.email).toHaveText('Email inválido')
+      await expect(alerts.phone).toHaveText('Telefone inválido')
+      await expect(alerts.document).toHaveText('CPF inválido')
+      await expect(alerts.store).toHaveText('Selecione uma loja')
+      await expect(alerts.terms).toHaveText('Aceite os termos')
     })
 
-    test('deve validar limite mínimo de caracteres para Nome e Sobrenome', async ({ app, page }) => {
-
-      const nameAlert = page.locator('//label[text()="Nome"]/..//p')
-      const surnameAlert = page.locator('//label[text()="Sobrenome"]/..//p')
+    test('deve validar limite mínimo de caracteres para Nome e Sobrenome', async ({ app }) => {
 
       const customer = {
         name: 'A',
@@ -49,11 +44,11 @@ test.describe('Checkout', () => {
 
       await app.checkout.submit()
 
-      await expect(nameAlert).toHaveText('Nome deve ter pelo menos 2 caracteres')
-      await expect(surnameAlert).toHaveText('Sobrenome deve ter pelo menos 2 caracteres')
+      await expect(alerts.name).toHaveText('Nome deve ter pelo menos 2 caracteres')
+      await expect(alerts.lastName).toHaveText('Sobrenome deve ter pelo menos 2 caracteres')
     })
 
-    test('deve exibir erro para e-mail com formato inválido', async ({ app, page }) => {
+    test('deve exibir erro para e-mail com formato inválido', async ({ app }) => {
 
       const customer = {
         name: 'Fernando',
@@ -69,10 +64,10 @@ test.describe('Checkout', () => {
 
       await app.checkout.submit()
 
-      await expect(page.getByText('Email inválido', { exact: true })).toBeVisible()
+      await expect(alerts.email).toHaveText('Email inválido')
     })
 
-    test('deve exibir erro para CPF inválido', async ({ app, page }) => {
+    test('deve exibir erro para CPF inválido', async ({ app }) => {
 
       const customer = {
         name: 'Fernando',
@@ -87,12 +82,10 @@ test.describe('Checkout', () => {
       await app.checkout.acceptTerms()
 
       await app.checkout.submit()
-      await expect(page.getByText('CPF inválido', { exact: true })).toBeVisible()
+      await expect(alerts.document).toHaveText('CPF inválido')
     })
 
-    test('deve validar obrigatoriedade e dados inválidos', async ({ app, page }) => {
-
-      const termsAlert = page.locator('//label[@for="terms"]/following-sibling::p')
+    test('deve validar obrigatoriedade e dados inválidos', async ({ app }) => {
 
       const customer = {
         name: 'Fernando',
@@ -109,7 +102,7 @@ test.describe('Checkout', () => {
 
       await app.checkout.submit()
 
-      await expect(page.getByText('Aceite os termos', { exact: true })).toBeVisible()
+      await expect(alerts.terms).toHaveText('Aceite os termos')
     })
 
   })
