@@ -1,4 +1,5 @@
 import { test, expect } from '../support/fixtures'
+import { deleteOrderByEmail } from '../support/database/orderRepository'
 
 test.describe('Checkout', () => {
 
@@ -117,6 +118,8 @@ test.describe('Checkout', () => {
         paymentMethod: 'À Vista',
         totalPrice: 'R$ 40.000,00'
       }
+
+      await deleteOrderByEmail(customer.email)
 
       await page.goto('/')
       await page.getByRole('link', { name: /Configure Agora/i }).click()
