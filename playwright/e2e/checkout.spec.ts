@@ -2,16 +2,13 @@ import { test, expect } from '../support/fixtures'
 
 test.describe('Checkout', () => {
 
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/order')
-    await expect(page.getByRole('heading', { name: 'Finalizar Pedido' })).toBeVisible()
-  })
-
   test.describe('Validações de campos obrigatórios', () => {
 
     let alerts: any
 
     test.beforeEach(async ({ app, page }) => {
+      await page.goto('/order')
+      await expect(page.getByRole('heading', { name: 'Finalizar Pedido' })).toBeVisible()
       alerts = app.checkout.elements.alerts
     })
 
@@ -105,5 +102,40 @@ test.describe('Checkout', () => {
       await expect(alerts.terms).toHaveText('Aceite os termos')
     })
 
+  })
+
+  test.describe('Pagamento e confirmação de pedido', () => {
+
+    test('deve criar um pedido com sucesso pagamento à vista', async ({ app, page }) => {
+      const customer = {
+        name: 'João',
+        lastName: 'Silva',
+        email: 'joao.silva@teste.com',
+        document: '45678912345',
+        phone: '(11) 98765-4321',
+        store: 'Velô Paulista',
+        paymentMethod: 'À Vista',
+        totalPrice: 'R$ 40.000,00'
+      }
+
+      await page.goto('/')
+      await page.getByRole('link', { name: /Configure Agora/i }).click()
+
+      await app.configurator.expectPrice(customer.totalPrice)
+      await app.configurator.finishConfigurator()
+      await app.checkout.expectLoaded()
+
+      await app.checkout.fillCustomerData(customer)
+      await app.checkout.selectStore(customer.store)
+
+      await app.checkout.selectPaymentMethod(customer.paymentMethod)
+      await app.checkout.expectSummaryTotal(customer.totalPrice)
+      await app.checkout.acceptTerms()
+      await app.checkout.submit()
+
+      // Assert: Confirmação
+      await expect(page).toHaveURL(/\/success/)
+      await expect(page.getByRole('heading', { name: 'Pedido Aprovado!' })).toBeVisible()
+    })
   })
 })
