@@ -149,16 +149,7 @@ test.describe('Checkout', () => {
 
       await deleteOrderByEmail(customer.email)
 
-      await page.route('**/functions/v1/credit-analysis', async (route) => {
-        await route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify({
-            status: 'Done',
-            score: 710,
-          }),
-        })
-      })
+      await app.creditAnalysis.mockScore(710)
 
       await app.configurator.openFromHome()
 
@@ -196,16 +187,7 @@ test.describe('Checkout', () => {
 
       await deleteOrderByEmail(customer.email)
 
-      await page.route('**/functions/v1/credit-analysis', async (route) => {
-        await route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify({
-            status: 'Done',
-            score: 600,
-          }),
-        })
-      })
+      await app.creditAnalysis.mockScore(600)
 
       await app.configurator.openFromHome()
 
@@ -242,16 +224,7 @@ test.describe('Checkout', () => {
 
       await deleteOrderByEmail(customer.email)
 
-      await page.route('**/functions/v1/credit-analysis', async (route) => {
-        await route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify({
-            status: 'Done',
-            score: 500,
-          }),
-        })
-      })
+      await app.creditAnalysis.mockScore(500)
 
       await app.configurator.openFromHome()
 
@@ -289,16 +262,7 @@ test.describe('Checkout', () => {
 
       await deleteOrderByEmail(customer.email)
 
-      await page.route('**/functions/v1/credit-analysis', async (route) => {
-        await route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify({
-            status: 'Done',
-            score: 500,
-          }),
-        })
-      })
+      await app.creditAnalysis.mockScore(500)
 
       await app.configurator.openFromHome()
 
@@ -337,16 +301,7 @@ test.describe('Checkout', () => {
 
       await deleteOrderByEmail(customer.email)
 
-      await page.route('**/functions/v1/credit-analysis', async (route) => {
-        await route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify({
-            status: 'Done',
-            score: 450,
-          }),
-        })
-      })
+      await app.creditAnalysis.mockScore(450)
 
       await app.configurator.openFromHome()
 
@@ -385,16 +340,7 @@ test.describe('Checkout', () => {
 
       await deleteOrderByEmail(customer.email)
 
-      await page.route('**/functions/v1/credit-analysis', async (route) => {
-        await route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify({
-            status: 'Done',
-            score: 300,
-          }),
-        })
-      })
+      await app.creditAnalysis.mockScore(300)
 
       await app.configurator.openFromHome()
 
