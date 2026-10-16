@@ -2,6 +2,11 @@ import { Page, expect } from '@playwright/test'
 
 export function createConfiguratorActions(page: Page) {
   return {
+    async openFromHome() {
+      await page.goto('/')
+      await page.getByRole('link', { name: /Configure Agora/i }).click()
+    },
+
     async open() {
       await page.goto('/configure')
     },
