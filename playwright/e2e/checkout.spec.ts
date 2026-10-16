@@ -113,8 +113,7 @@ test.describe('Checkout', () => {
 
       await deleteOrderByEmail(customer.email)
 
-      await page.goto('/')
-      await page.getByRole('link', { name: /Configure Agora/i }).click()
+      await app.configurator.openFromHome()
 
       await app.configurator.expectPrice(customer.totalPrice)
       await app.configurator.finishConfigurator()
@@ -133,8 +132,10 @@ test.describe('Checkout', () => {
       await expect(page.getByRole('heading', { name: 'Pedido Aprovado!' })).toBeVisible()
     })
 
-    test('deve aprovar automáticamente o crédito quando o score do CPF for maior que 700 no financiamento.', async ({ app, page }) => {
-
+    test('deve aprovar automáticamente o crédito quando o score do CPF for maior que 700 no financiamento.', async ({
+      app,
+      page,
+    }) => {
       const customer = {
         name: 'Steve',
         lastName: 'Woz',
@@ -148,19 +149,18 @@ test.describe('Checkout', () => {
 
       await deleteOrderByEmail(customer.email)
 
-      await page.route('**/functions/v1/credit-analysis', async route => {
+      await page.route('**/functions/v1/credit-analysis', async (route) => {
         await route.fulfill({
           status: 200,
           contentType: 'application/json',
           body: JSON.stringify({
             status: 'Done',
             score: 710,
-          })
+          }),
         })
       })
 
-      await page.goto('/')
-      await page.getByRole('link', { name: /Configure Agora/i }).click()
+      await app.configurator.openFromHome()
 
       await app.configurator.expectPrice(customer.totalPrice)
       await app.configurator.finishConfigurator()
@@ -179,8 +179,10 @@ test.describe('Checkout', () => {
       await expect(page.getByRole('heading', { name: 'Pedido Aprovado!' })).toBeVisible()
     })
 
-    test('deve encaminhar para análise de crédito quando o score do CPF for entre 501 e 700 no financiamento.', async ({ app, page }) => {
-
+    test('deve encaminhar para análise de crédito quando o score do CPF for entre 501 e 700 no financiamento.', async ({
+      app,
+      page,
+    }) => {
       const customer = {
         name: 'Tony',
         lastName: 'Stark',
@@ -194,19 +196,18 @@ test.describe('Checkout', () => {
 
       await deleteOrderByEmail(customer.email)
 
-      await page.route('**/functions/v1/credit-analysis', async route => {
+      await page.route('**/functions/v1/credit-analysis', async (route) => {
         await route.fulfill({
           status: 200,
           contentType: 'application/json',
           body: JSON.stringify({
             status: 'Done',
             score: 600,
-          })
+          }),
         })
       })
 
-      await page.goto('/')
-      await page.getByRole('link', { name: /Configure Agora/i }).click()
+      await app.configurator.openFromHome()
 
       await app.configurator.expectPrice(customer.totalPrice)
       await app.configurator.finishConfigurator()
@@ -224,8 +225,10 @@ test.describe('Checkout', () => {
       await expect(page.getByRole('heading', { name: 'Pedido em Análise!' })).toBeVisible()
     })
 
-    test('deve reprovar o crédito quando o score do CPF for menor ou igual a 500 no financiamento sem entrada.', async ({ app, page }) => {
-
+    test('deve reprovar o crédito quando o score do CPF for menor ou igual a 500 no financiamento sem entrada.', async ({
+      app,
+      page,
+    }) => {
       const customer = {
         name: 'Clark',
         lastName: 'Kent',
@@ -239,19 +242,18 @@ test.describe('Checkout', () => {
 
       await deleteOrderByEmail(customer.email)
 
-      await page.route('**/functions/v1/credit-analysis', async route => {
+      await page.route('**/functions/v1/credit-analysis', async (route) => {
         await route.fulfill({
           status: 200,
           contentType: 'application/json',
           body: JSON.stringify({
             status: 'Done',
             score: 500,
-          })
+          }),
         })
       })
 
-      await page.goto('/')
-      await page.getByRole('link', { name: /Configure Agora/i }).click()
+      await app.configurator.openFromHome()
 
       await app.configurator.expectPrice(customer.totalPrice)
       await app.configurator.finishConfigurator()
@@ -269,8 +271,10 @@ test.describe('Checkout', () => {
       await expect(page.getByRole('heading', { name: /Crédito Reprovado/i })).toBeVisible()
     })
 
-    test('deve reprovar o crédito quando o score do CPF for menor ou igual a 500 no financiamento com entrada menor que 50%.', async ({ app, page }) => {
-
+    test('deve reprovar o crédito quando o score do CPF for menor ou igual a 500 no financiamento com entrada menor que 50%.', async ({
+      app,
+      page,
+    }) => {
       const customer = {
         name: 'Diana',
         lastName: 'Prince',
@@ -285,19 +289,18 @@ test.describe('Checkout', () => {
 
       await deleteOrderByEmail(customer.email)
 
-      await page.route('**/functions/v1/credit-analysis', async route => {
+      await page.route('**/functions/v1/credit-analysis', async (route) => {
         await route.fulfill({
           status: 200,
           contentType: 'application/json',
           body: JSON.stringify({
             status: 'Done',
             score: 500,
-          })
+          }),
         })
       })
 
-      await page.goto('/')
-      await page.getByRole('link', { name: /Configure Agora/i }).click()
+      await app.configurator.openFromHome()
 
       await app.configurator.expectPrice(customer.totalPrice)
       await app.configurator.finishConfigurator()
@@ -316,8 +319,10 @@ test.describe('Checkout', () => {
       await expect(page.getByRole('heading', { name: /Crédito Reprovado/i })).toBeVisible()
     })
 
-    test('deve aprovar o crédito quando o score do CPF for menor ou igual a 500 no financiamento com entrada igual a 50%.', async ({ app, page }) => {
-
+    test('deve aprovar o crédito quando o score do CPF for menor ou igual a 500 no financiamento com entrada igual a 50%.', async ({
+      app,
+      page,
+    }) => {
       const customer = {
         name: 'Peter',
         lastName: 'Parker',
@@ -332,19 +337,18 @@ test.describe('Checkout', () => {
 
       await deleteOrderByEmail(customer.email)
 
-      await page.route('**/functions/v1/credit-analysis', async route => {
+      await page.route('**/functions/v1/credit-analysis', async (route) => {
         await route.fulfill({
           status: 200,
           contentType: 'application/json',
           body: JSON.stringify({
             status: 'Done',
             score: 450,
-          })
+          }),
         })
       })
 
-      await page.goto('/')
-      await page.getByRole('link', { name: /Configure Agora/i }).click()
+      await app.configurator.openFromHome()
 
       await app.configurator.expectPrice(customer.totalPrice)
       await app.configurator.finishConfigurator()
@@ -363,8 +367,10 @@ test.describe('Checkout', () => {
       await expect(page.getByRole('heading', { name: /Pedido Aprovado!/i })).toBeVisible()
     })
 
-    test('deve aprovar o crédito quando o score do CPF for menor ou igual a 500 no financiamento com entrada maior que 50%.', async ({ app, page }) => {
-
+    test('deve aprovar o crédito quando o score do CPF for menor ou igual a 500 no financiamento com entrada maior que 50%.', async ({
+      app,
+      page,
+    }) => {
       const customer = {
         name: 'Axel',
         lastName: 'Rose',
@@ -379,19 +385,18 @@ test.describe('Checkout', () => {
 
       await deleteOrderByEmail(customer.email)
 
-      await page.route('**/functions/v1/credit-analysis', async route => {
+      await page.route('**/functions/v1/credit-analysis', async (route) => {
         await route.fulfill({
           status: 200,
           contentType: 'application/json',
           body: JSON.stringify({
             status: 'Done',
             score: 300,
-          })
+          }),
         })
       })
 
-      await page.goto('/')
-      await page.getByRole('link', { name: /Configure Agora/i }).click()
+      await app.configurator.openFromHome()
 
       await app.configurator.expectPrice(customer.totalPrice)
       await app.configurator.finishConfigurator()
@@ -411,4 +416,3 @@ test.describe('Checkout', () => {
     })
   })
 })
-
