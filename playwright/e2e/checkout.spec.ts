@@ -99,7 +99,7 @@ test.describe('Checkout', () => {
   })
 
   test.describe('Pagamento e confirmação de pedido', () => {
-    test('deve criar um pedido com sucesso pagamento à vista', async ({ app, page }) => {
+    test('deve criar um pedido com sucesso pagamento à vista', async ({ app }) => {
       const customer = {
         name: 'João',
         lastName: 'Silva',
@@ -128,13 +128,11 @@ test.describe('Checkout', () => {
       await app.checkout.submit()
 
       // Assert: Confirmação
-      await expect(page).toHaveURL(/\/success/)
-      await expect(page.getByRole('heading', { name: 'Pedido Aprovado!' })).toBeVisible()
+      await app.confirmation.expectStatus('APROVADO')
     })
 
     test('deve aprovar automáticamente o crédito quando o score do CPF for maior que 700 no financiamento.', async ({
       app,
-      page,
     }) => {
       const customer = {
         name: 'Steve',
@@ -166,13 +164,11 @@ test.describe('Checkout', () => {
       await app.checkout.submit()
 
       // Assert: Confirmação
-      await expect(page).toHaveURL(/\/success/)
-      await expect(page.getByRole('heading', { name: 'Pedido Aprovado!' })).toBeVisible()
+      await app.confirmation.expectStatus('APROVADO')
     })
 
     test('deve encaminhar para análise de crédito quando o score do CPF for entre 501 e 700 no financiamento.', async ({
       app,
-      page,
     }) => {
       const customer = {
         name: 'Tony',
@@ -203,13 +199,11 @@ test.describe('Checkout', () => {
       await app.checkout.submit()
 
       // Assert: Confirmação e Validação do Status
-      await expect(page).toHaveURL(/\/success/)
-      await expect(page.getByRole('heading', { name: 'Pedido em Análise!' })).toBeVisible()
+      await app.confirmation.expectStatus('EM_ANALISE')
     })
 
     test('deve reprovar o crédito quando o score do CPF for menor ou igual a 500 no financiamento sem entrada.', async ({
       app,
-      page,
     }) => {
       const customer = {
         name: 'Clark',
@@ -240,13 +234,11 @@ test.describe('Checkout', () => {
       await app.checkout.submit()
 
       // Assert: Confirmação e Validação do Status
-      await expect(page).toHaveURL(/\/success/)
-      await expect(page.getByRole('heading', { name: /Crédito Reprovado/i })).toBeVisible()
+      await app.confirmation.expectStatus('REPROVADO')
     })
 
     test('deve reprovar o crédito quando o score do CPF for menor ou igual a 500 no financiamento com entrada menor que 50%.', async ({
       app,
-      page,
     }) => {
       const customer = {
         name: 'Diana',
@@ -279,13 +271,11 @@ test.describe('Checkout', () => {
       await app.checkout.submit()
 
       // Assert: Confirmação e Validação do Status
-      await expect(page).toHaveURL(/\/success/)
-      await expect(page.getByRole('heading', { name: /Crédito Reprovado/i })).toBeVisible()
+      await app.confirmation.expectStatus('REPROVADO')
     })
 
     test('deve aprovar o crédito quando o score do CPF for menor ou igual a 500 no financiamento com entrada igual a 50%.', async ({
       app,
-      page,
     }) => {
       const customer = {
         name: 'Peter',
@@ -318,13 +308,11 @@ test.describe('Checkout', () => {
       await app.checkout.submit()
 
       // Assert: Confirmação e Validação do Status
-      await expect(page).toHaveURL(/\/success/)
-      await expect(page.getByRole('heading', { name: /Pedido Aprovado!/i })).toBeVisible()
+      await app.confirmation.expectStatus('APROVADO')
     })
 
     test('deve aprovar o crédito quando o score do CPF for menor ou igual a 500 no financiamento com entrada maior que 50%.', async ({
       app,
-      page,
     }) => {
       const customer = {
         name: 'Axel',
@@ -357,8 +345,7 @@ test.describe('Checkout', () => {
       await app.checkout.submit()
 
       // Assert: Confirmação e Validação do Status
-      await expect(page).toHaveURL(/\/success/)
-      await expect(page.getByRole('heading', { name: /Pedido Aprovado!/i })).toBeVisible()
+      await app.confirmation.expectStatus('APROVADO')
     })
   })
 })
